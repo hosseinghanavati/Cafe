@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables</title>
+    <link href={{ url_for('static',filename='bootstrap.min.css') }} rel="stylesheet">
+    <link href="../static/table-css.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--        <link rel="stylesheet" href="reg.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <!--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">-->
+    <!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+
+<body>
+<div class="container mt-5 mb-3">
+    <div class="row">
+
+        {% for i in table_orders %}
+            <div class="col-md-4">
+                <div class="card p-3 mb-2">
+                    <h3 class="heading">Table {{ i.number }}<br>{{ i.position }}</h3>
+                    <button id="table{{ i.number }}" onclick="table('table{{ i.number }}-modal','table{{ i.number }}','close{{ i.number }}')">Status</button>
+                    <div id="table{{ i.number }}-modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" id="close{{ i.number }}">&times;</span>
+                            <p>Table {{ i.number }} - Order List</p>
+
+                            {% if table_orders[i] == 'none' %}
+                                <p>Table Free</p>
+
+                            {% else %}
+                                <ul>
+                                    {% for item in table_orders[i].menu_items %}
+                                        <li>{{ item[0].name }} : {{ item[1] }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                    </br>
+                    <div class="progress">
+                        <div class="progress-bar-t1" role="progressbar" style="width:({{ i.status }}*33%)%"></div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+</body>
+
+<script>
+
+function table(a, b,c){
+let modal = document.getElementById(a);
+let btn = document.getElementById(b);
+let span = document.getElementById(c);
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+span.onclick = function () {
+    modal.style.display = "none";
+}
+window.onclick = function (event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+}
+</script>
+
+
+</html>

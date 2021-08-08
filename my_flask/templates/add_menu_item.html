@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>add menu item</title>
+    <link href={{ url_for('static',filename='bootstrap.min.css') }} rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+<div>
+    <label for="m_name">Name</label>
+    <input type="text" name="name" id="m_name">
+    <label for="m_price">Price</label>
+    <input type="number" name="price" id="m_price" value=0 min=0>
+    <label for="m_discount">Discount</label>
+    <input type="number" name="discount" id="m_discount" value=0 min=0>
+    <label for="m_cooking_time">Cooking Time</label>
+    <input type="number" name="cooking_time" id="m_cooking_time" value=5 min=5>
+
+    <label for="sobh">Breakfast</label>
+    <input type="checkbox" name="sobh" id="sobh" value="None" onchange="is_chek(this.id)">
+    <label for="zohr">Lunch</label>
+    <input type="checkbox" name="zohr" id="zohr" value="None" onchange="is_chek(this.id)">
+    <label for="shab">Dinner</label>
+    <input type="checkbox" name="shab" id="shab" value="None" onchange="is_chek(this.id)">
+
+    <label for="m_category">Category</label>
+    <select name="category" id="m_category">
+        {% for i in category %}
+            <option value="{{ i.name }}">{{ i.name }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="add_menu_item()">OK...</button>
+    {#    <input type="submit" value="Ok" onclick="add_menu_item()">#}
+</div>
+<br><br><br>
+<div>
+    <label for="c_name">Name</label>
+    <input type="text" name="name" id="c_name">
+    <button onclick="add_category()">Ok...</button>
+    {#    <input type="submit" value="Ok" onclick="add_category()">#}
+</div>
+<br><br><br>
+<div>
+    <select name="menu_items" id="menu_items">
+        {% for i in menu_items %}
+            <option value="{{ i.name }}">{{ i.name }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="delete_menu_item()">Delete</button>
+</div>
+<br><br><br>
+{#<div>#}
+{#    <select name="u_menu_items" id="u_menu_items" onchange="update(this.value)">#}
+{#        {% for i in menu_items %}#}
+{#            <option value="{{ i.name }}">{{ i.name }}</option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    {% for i in menu_items %}#}
+{##}
+{#        <label for="m_name">Name</label>#}
+{#        <input type="text" name="name" id="m_name">#}
+{#        <label for="m_price">Price</label>#}
+{#        <input type="number" name="price" id="m_price" value=0 min=0>#}
+{#        <label for="m_discount">Discount</label>#}
+{#        <input type="number" name="discount" id="m_discount" value=0 min=0>#}
+{#        <label for="m_cooking_time">Cooking Time</label>#}
+{#        <input type="number" name="cooking_time" id="m_cooking_time" value=5 min=5>#}
+{##}
+{#        <label for="sobh">Breakfast</label>#}
+{#        <input type="checkbox" name="sobh" id="sobh" value="None" onchange="is_chek(this.id)">#}
+{#        <label for="zohr">Lunch</label>#}
+{#        <input type="checkbox" name="zohr" id="zohr" value="None" onchange="is_chek(this.id)">#}
+{#        <label for="shab">Dinner</label>#}
+{#        <input type="checkbox" name="shab" id="shab" value="None" onchange="is_chek(this.id)">#}
+{##}
+{#        <label for="m_category">Category</label>#}
+{#        <select name="category" id="m_category">#}
+{#            {% for i in category %}#}
+{#                <option value="{{ i.name }}">{{ i.name }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#        <button onclick="add_menu_item()">OK...</button>#}
+{#    {% endfor %}#}
+{#</div>#}
+<script>
+    function update(name){
+        alert(name)
+    }
+    function delete_menu_item() {
+        let operation = 'delete_menu_item'
+        let menu_item_name = $('#menu_items').val()
+        $.post("{{ url_for('cashier_page_content') }}", {
+            'name': 'add_menu_item',
+            'menu_item_name': menu_item_name,
+            'operation': operation
+        }, function (response) {
+            $('#content').html('')
+            $('#content').html(response)
+        })
+
+    }
+
+    function is_chek(id) {
+        if ($(`#${id}`).val() == 'None') {
+            $(`#${id}`).val('ok');
+        } else if ($(`#${id}`).val() == 'ok') {
+            $(`#${id}`).val('None');
+        }
+    }
+
+    function add_menu_item() {
+        let operation = 'add_order'
+        let name = $('#m_name').val()
+        if (!name) {
+            alert('name is empty')
+            return 0;
+        }
+        let price = $('#m_price').val()
+        if (!price) {
+            alert('price is empty')
+            return 0;
+        }
+        let discount = $('#m_discount').val()
+        if (!price) {
+            alert('discount is empty')
+            return 0;
+        }
+        let cooking_time = $('#m_cooking_time').val()
+        if (!cooking_time) {
+            alert('cooking is empty')
+            return 0;
+        }
+        let sobh = $('#sobh').val()
+        let zohr = $('#zohr').val()
+        let shab = $('#shab').val()
+        if ($('#sobh').val() == 'None' && $('#zohr').val() == 'None' && $('#shab').val() == 'None') {
+            alert('Please select at least one option from serving time periods')
+            return 0;
+        }
+        let category = $('#m_category').val()
+        $.post("{{ url_for('cashier_page_content') }}", {
+            'name': 'add_menu_item',
+            'order_name': name,
+            'order_price': price,
+            'order_discount': discount,
+            'order_sobh': sobh,
+            'order_zohr': zohr,
+            'order_shab': shab,
+            'order_category_name': category,
+            'order_cooking_time': cooking_time,
+            'operation': operation
+        }, function (response) {
+            $('#content').html('')
+            $('#content').html(response)
+        })
+    }
+
+    function add_category() {
+        let operation = 'add_category'
+        let name = $('#c_name').val()
+        if (!name) {
+            alert('name is empty')
+            return 0;
+        }
+        $.post("{{ url_for('cashier_page_content') }}", {
+            'name': 'add_menu_item',
+            'category_name': name,
+            'operation': operation
+        }, function (response) {
+            $('#content').html('')
+            $('#content').html(response)
+        })
+    }
+</script>
+</body>
+</html>

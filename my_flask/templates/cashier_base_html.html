@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Cafe-{% block title %}{% endblock %}</title>
+    <link href={{ url_for('static',filename='bootstrap.min.css') }} rel="stylesheet">
+    <link href={{ url_for('static',filename='cashier_base_html.css') }} rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script type="text/javascript" src="https://static.neshan.org/sdk/openlayers/5.3.0/ol.js"></script>
+</head>
+<style>
+    body, h1, h2, h3, h4, h5 {
+        font-family: "Raleway", sans-serif
+    }
+</style>
+<body style="background-color: lightyellow">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 slide_bar">
+            <div class="row h_row_title"></div>
+            <div style="border-top: solid 1px grey;" class="row btn_row">
+                <button class="h_row" onclick="content_include('dashboard')">DASHBOARD</button>
+            </div>
+            <div class="row btn_row" style="">
+                <button class="h_row" onclick="content_include('cashier_order_list')">ORDERS</button>
+            </div>
+            <div class="row btn_row" style="">
+                <button class="h_row" onclick="content_include('tables')">TABLES</button>
+            </div>
+            <div class="row btn_row" style="">
+                <button class="h_row" onclick="content_include('add_menu_item')">MENU ITEMS</button>
+            </div>
+            <div class="row btn_row" style="">
+                <button class="h_row" onclick="content_include('receipt')">RECEIPT</button>
+            </div>
+            <div class="row btn_row" style="">
+                <button class="h_row" onclick="content_include('charts')">CHARTS</button>
+            </div>
+        </div>
+        <div id="content" class="col-10">
+            {% block main %}
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<script>
+    function content_include(name) {
+        $.get("{{ url_for('cashier_page_content') }}", {'name': name}, function (response) {
+            $('#content').html('')
+            $('#content').html(response)
+        })
+    }
+</script>
+</body>
+</html>

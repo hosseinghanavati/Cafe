@@ -1,0 +1,6 @@
+venv
+.idea
+erd
+other
+dbtest.py
+sub_fa_translator

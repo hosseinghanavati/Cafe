@@ -1,0 +1,44 @@
+.slide_bar{
+    /*margin-top: 1rem;*/
+
+    height: 657px;
+    box-shadow: 1px 1px 4px 1px grey;
+    position: sticky;
+    top: 0;
+    padding: 0;
+}
+.btn_row{
+    height: 12%;
+    margin-right: 0;
+}
+
+.h_row{
+    color: white;
+
+    margin-left: 0;
+    width: 100%;
+    background-color: darkorange;
+    color: white;
+    height: 100%;
+    border: 0;
+    border-bottom: solid 1px white;
+
+}
+.h_row_title{
+    background-image: url("cafe.jpg");
+    background-position: center;
+    background-size: cover;
+    margin-right: 0;
+    padding-right: 0;
+    padding-top: 1rem;
+    padding-left: 1.5rem;
+    height: 28%;
+
+
+}
+button.h_row:hover{
+    background-color: saddlebrown;
+}
+button.h_row:active{
+    background-color: black;
+}
